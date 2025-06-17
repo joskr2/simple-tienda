@@ -74,7 +74,7 @@ const Hero = () => {
       </Carousel>
 
       {/* Overlay oscuro */}
-      <div className="absolute inset-0 bg-black/50 z-10"></div>
+      <div className="absolute inset-0 bg-black/50 z-10"/>
 
       {/* Contenido de texto centrado */}
       <div className="absolute inset-0 flex items-center justify-center z-20">
@@ -82,9 +82,9 @@ const Hero = () => {
           <p className="text-lg md:text-xl mb-8 drop-shadow-md max-w-2xl">
             Descubre productos únicos y de calidad para tu hogar y estilo de
             vida{" "}
-            <h1 className="text-4xl md:text-6xl font-bold mb-4 drop-shadow-lg">
+            <span className="text-4xl md:text-6xl font-bold mb-4 drop-shadow-lg">
               Bienvenido a mi tienda virtual
-            </h1>
+            </span>
           </p>
           <Button
             variant="ghost"
@@ -99,6 +99,7 @@ const Hero = () => {
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30 flex space-x-2">
         {Array.from({ length: count }).map((_, index) => (
           <button
+            type="button"
             key={index}
             className={`w-3 h-3 rounded-full transition-all duration-300 ${
               index + 1 === current
