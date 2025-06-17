@@ -5,10 +5,21 @@ import ProductGrid from "./components/custom/product-grid";
 
 const App = () => {
   return (
-    <>
-      <Hero />
-      <ProductGrid />
-    </>
+    <div className="container mx-auto">
+      <Hero type="home" description="Hero" buttonText="Hero" />
+      <section className="mt-10">
+        <ProductGrid />
+      </section>
+      <section className="mt-10">
+        <Hero
+          type="product"
+          title="Los favoritos de los clientes"
+          description="Productos"
+          buttonText="Productos"
+        />
+        <ProductGrid />
+      </section>
+    </div>
   );
 };
 
