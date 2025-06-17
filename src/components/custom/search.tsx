@@ -11,9 +11,9 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-import { SearchIcon } from "lucide-react";
+// import { SearchIcon } from "lucide-react";
 import { z } from "zod";
-import { Button } from "../ui/button";
+// import { Button } from "../ui/button";
 
 const formSchema = z.object({
   search: z.string().min(1, {
@@ -46,7 +46,7 @@ const SearchForm = () => {
             render={({ field }) => (
               <FormItem className="align-middle">
                 <FormLabel hidden>Buscar</FormLabel>
-                <FormControl>
+                <FormControl className="bg-white rounded-lg text-black">
                   <Input placeholder="Buscar" {...field} />
                 </FormControl>
                 <FormDescription hidden>Buscar productos</FormDescription>
@@ -54,13 +54,13 @@ const SearchForm = () => {
               </FormItem>
             )}
           />
-          <Button
+          {/* <Button
             type="submit"
             className=" font-semibold py-3 px-8 rounded-lg transition-colors duration-300 shadow-lg align-middle"
             variant="ghost"
           >
             <SearchIcon className="w-4 h-4" />
-          </Button>
+          </Button> */}
         </form>
       </Form>
     </div>

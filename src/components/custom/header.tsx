@@ -1,3 +1,5 @@
+import SearchForm from "./search";
+
 const Header = () => {
   return (
     <header className="bg-gray-800 text-white p-4">
@@ -9,9 +11,7 @@ const Header = () => {
         <nav>
           <ul className="flex space-x-4">
              <li>
-              <a href="/otros" className="hover:underline">
-                Otros
-              </a>
+              <SearchForm />
             </li> 
 
           </ul>
