@@ -79,14 +79,17 @@ const Hero = () => {
       {/* Contenido de texto centrado */}
       <div className="absolute inset-0 flex items-center justify-center z-20">
         <div className="text-center text-white px-4">
-          <h1 className="text-4xl md:text-6xl font-bold mb-4 drop-shadow-lg">
-            Bienvenido a mi tienda virtual
-          </h1>
           <p className="text-lg md:text-xl mb-8 drop-shadow-md max-w-2xl">
             Descubre productos únicos y de calidad para tu hogar y estilo de
-            vida
+            vida{" "}
+            <h1 className="text-4xl md:text-6xl font-bold mb-4 drop-shadow-lg">
+              Bienvenido a mi tienda virtual
+            </h1>
           </p>
-          <Button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg transition-colors duration-300 shadow-lg">
+          <Button
+            variant="ghost"
+            className=" hover:bg-white/50 text-white font-semibold py-3 px-8 rounded-lg transition-colors duration-300 shadow-lg"
+          >
             Explorar productos
           </Button>
         </div>
