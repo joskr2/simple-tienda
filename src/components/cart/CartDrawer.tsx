@@ -386,10 +386,10 @@ function CouponSection({
       </div>
 
       {/* Cupones aplicados */}
-      {appliedCoupons.length > 0 && (
+      {appliedCoupons && appliedCoupons.length > 0 && (
         <div className="space-y-2">
           <h5 className="text-sm font-medium">Cupones aplicados:</h5>
-          {appliedCoupons.map((coupon) => (
+          {appliedCoupons?.map((coupon) => (
             <div
               key={coupon.code}
               className="flex items-center justify-between p-2 bg-green-50 dark:bg-green-900/20 rounded-lg"
@@ -551,7 +551,7 @@ export function CartDrawer({
                   <div className="border-t bg-muted/30 p-4 space-y-4">
                     {/* Sección de cupones */}
                     <CouponSection
-                      appliedCoupons={state.appliedCoupons}
+                      appliedCoupons={state.appliedCoupons || []}
                       onApplyCoupon={applyCoupon}
                       onRemoveCoupon={removeCoupon}
                       error={error}

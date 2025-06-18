@@ -211,14 +211,14 @@ function cartReducer(state: CartState, action: CartAction): CartState {
             newSummary.tax -
             couponDiscount,
         },
-        appliedCoupons: [...state.appliedCoupons, coupon],
+        appliedCoupons: [...(state.appliedCoupons || []), coupon],
         lastUpdated: new Date().toISOString(),
       };
     }
 
     case "REMOVE_COUPON": {
       const { couponCode } = action.payload;
-      const newAppliedCoupons = state.appliedCoupons.filter(
+      const newAppliedCoupons = (state.appliedCoupons || []).filter(
         (c) => c.code !== couponCode
       );
       const newSummary = calculateCartSummary(state.items);
@@ -234,7 +234,9 @@ function cartReducer(state: CartState, action: CartAction): CartState {
     case "RESTORE_CART": {
       const { cart } = action.payload;
       return {
+        ...initialCartState,
         ...cart,
+        appliedCoupons: cart.appliedCoupons || [],
         lastUpdated: new Date().toISOString(),
       };
     }
@@ -262,10 +264,18 @@ export function CartProvider({ children }: CartProviderProps) {
       const savedCart = localStorage.getItem(CART_STORAGE_KEY);
       if (savedCart) {
         const parsedCart = JSON.parse(savedCart);
-        dispatch({ type: "RESTORE_CART", payload: { cart: parsedCart } });
+        // Asegurar que el carrito tenga todas las propiedades necesarias
+        const validatedCart = {
+          ...initialCartState,
+          ...parsedCart,
+          appliedCoupons: parsedCart.appliedCoupons || [],
+        };
+        dispatch({ type: "RESTORE_CART", payload: { cart: validatedCart } });
       }
     } catch (error) {
       console.error("Error loading cart from localStorage:", error);
+      // Limpiar localStorage corrupto
+      localStorage.removeItem(CART_STORAGE_KEY);
     }
   }, []);
 
