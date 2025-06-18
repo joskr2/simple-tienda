@@ -1,386 +1,790 @@
-# 🛍️ Demo Tienda - E-commerce Moderno
+# 🛒 Demo Tienda - E-commerce React + TypeScript
 
-Una aplicación de e-commerce moderna construida con **React 19**, **TypeScript**, **Vite** y **TailwindCSS**. Diseñada con las mejores prácticas de desarrollo frontend, arquitectura escalable y experiencia de usuario excepcional.
+Una aplicación de comercio electrónico moderna construida con React, TypeScript, Vite y TailwindCSS. Incluye sistema de autenticación completo, carrito de compras, filtros avanzados y UI/UX moderna.
 
-## ✨ Características Principales
+## 📋 Tabla de Contenidos
 
-### 🎯 Funcionalidades Core
+- [Características](#-características)
+- [Tecnologías](#-tecnologías)
+- [Arquitectura del Proyecto](#-arquitectura-del-proyecto)
+- [Guía de Implementación Paso a Paso](#-guía-de-implementación-paso-a-paso)
+- [Estructura de Archivos](#-estructura-de-archivos)
+- [Instalación y Configuración](#-instalación-y-configuración)
+- [Scripts Disponibles](#-scripts-disponibles)
+- [Patrones de Diseño](#-patrones-de-diseño)
+- [Contribución](#-contribución)
 
-- **Catálogo de Productos** - Navegación y filtrado avanzado de productos
-- **Sistema de Categorías** - Filtros dinámicos por categorías (Electrónicos, Ropa, Libros, Hogar, Deportes, Belleza)
-- **Carrito de Compras** - Gestión completa del carrito con persistencia local
-- **Página de Detalles** - Vista detallada de productos con galería de imágenes
-- **Búsqueda Avanzada** - Búsqueda en tiempo real con filtros múltiples
-- **Responsive Design** - Completamente adaptable a todos los dispositivos
+## ✨ Características
 
-### 🎨 Experiencia de Usuario
+### 🔐 Sistema de Autenticación
 
-- **Animaciones Fluidas** - Transiciones suaves con Framer Motion
-- **Carga Optimizada** - Estados de carga inteligentes y skeleton screens
-- **Navegación Intuitiva** - Breadcrumbs y navegación clara
-- **Tema Moderno** - Diseño clean con TailwindCSS
-- **Accesibilidad** - Cumple estándares WCAG 2.1
+- Registro e inicio de sesión con validación
+- Gestión de tokens JWT con refresh automático
+- Persistencia de sesión en localStorage
+- Protección de rutas y componentes
 
-### ⚡ Rendimiento
+### 🛍️ E-commerce
 
-- **Lazy Loading** - Carga bajo demanda de componentes
-- **Optimización de Imágenes** - Gestión eficiente de assets
-- **Bundle Splitting** - División inteligente del código
-- **Caché Inteligente** - Estrategias de caché optimizadas
-
-## 🚀 Inicio Rápido
-
-### Prerrequisitos
-
-- **Node.js** >= 18.0.0
-- **npm** >= 9.0.0 o **yarn** >= 1.22.0
-
-### Instalación
-
-```bash
-# Clonar el repositorio
-git clone https://github.com/tu-usuario/demo-tienda.git
-
-# Navegar al directorio
-cd demo-tienda
-
-# Instalar dependencias
-npm install
-# o
-yarn install
-
-# Iniciar servidor de desarrollo
-npm run dev
-# o
-yarn dev
-```
-
-### Scripts Disponibles
-
-```bash
-# Desarrollo
-npm run dev          # Inicia el servidor de desarrollo
-npm run build        # Construye la aplicación para producción
-npm run preview      # Previsualiza la build de producción
-npm run lint         # Ejecuta el linter ESLint
-```
-
-## 🏗️ Arquitectura del Proyecto
-
-### Estructura de Directorios
-
-```
-demo-tienda/
-├── public/                 # Assets estáticos
-├── src/
-│   ├── components/         # Componentes reutilizables
-│   │   ├── ui/            # Componentes base del sistema de diseño
-│   │   ├── layout/        # Componentes de layout
-│   │   ├── product/       # Componentes específicos de productos
-│   │   ├── cart/          # Componentes del carrito
-│   │   ├── common/        # Componentes comunes
-│   │   └── custom/        # Componentes personalizados
-│   ├── contexts/          # Context providers (Carrito, Usuario, Tema)
-│   ├── hooks/             # Custom hooks
-│   ├── lib/               # Utilidades y configuraciones
-│   ├── page/              # Páginas principales
-│   ├── types/             # Definiciones de TypeScript
-│   ├── data/              # Datos estáticos y mock
-│   └── assets/            # Recursos de la aplicación
-├── components.json        # Configuración de shadcn/ui
-├── tailwind.config.js     # Configuración de TailwindCSS
-├── tsconfig.json          # Configuración de TypeScript
-└── vite.config.ts         # Configuración de Vite
-```
-
-### Tecnologías Utilizadas
-
-#### Frontend Core
-
-- **React 19** - Biblioteca de UI con las últimas características
-- **TypeScript 5.8** - Tipado estático para JavaScript
-- **Vite 6.3** - Build tool ultrarrápido
-- **React Router 7.6** - Enrutamiento declarativo
-
-#### Styling & UI
-
-- **TailwindCSS 4.1** - Framework de CSS utilitario
-- **Radix UI** - Componentes accesibles sin estilos
-- **Lucide React** - Iconos SVG optimizados
-- **Framer Motion** - Animaciones fluidas
-
-#### Estado y Datos
-
-- **React Context** - Gestión de estado global
-- **React Hook Form** - Manejo de formularios
-- **Zod** - Validación de esquemas
-- **TanStack Query** - Gestión de estado del servidor
-
-#### Desarrollo
-
-- **ESLint** - Linting de código
-- **TypeScript ESLint** - Reglas específicas de TS
-- **Vite Plugin React** - Hot Module Replacement
-
-## 📱 Páginas y Funcionalidades
-
-### 🏠 Página Principal (`/`)
-
-- Hero section con llamadas a la acción
-- Grid de productos destacados
-- Secciones de categorías
-- Testimonios y información de la empresa
-
-### 🛍️ Página de Productos (`/productos`)
-
-- Listado completo de productos
-- Filtros por categoría, precio, nombre
+- Catálogo de productos con filtros avanzados
+- Carrito de compras persistente
 - Búsqueda en tiempo real
-- Ordenamiento múltiple
-- Paginación optimizada
-- Vista de grid/lista
+- Categorización de productos
+- Vista detalle de productos
 
-### 📦 Detalle de Producto (`/producto/:id`)
+### 🎨 UI/UX Moderna
 
-- Galería de imágenes interactiva
-- Información detallada del producto
-- Especificaciones técnicas
-- Reseñas y calificaciones
-- Productos relacionados
-- Botones de acción (agregar al carrito)
+- Diseño responsive con TailwindCSS
+- Componentes reutilizables con shadcn/ui
+- Animaciones fluidas con Framer Motion
+- Tema claro/oscuro
+- Loading states y error handling
 
-### 🛒 Carrito de Compras
+### 🏗️ Arquitectura Robusta
 
-- Gestión completa del carrito
-- Persistencia en localStorage
-- Cálculos automáticos
-- Modificación de cantidades
-- Resumen de compra
+- TypeScript para type safety
+- Context API para gestión de estado
+- Custom hooks para lógica reutilizable
+- Separación clara de responsabilidades
 
-## 🎨 Sistema de Diseño
+## 🛠️ Tecnologías
 
-### Paleta de Colores
+- **Frontend**: React 18, TypeScript, Vite
+- **Styling**: TailwindCSS, shadcn/ui
+- **Routing**: React Router v6
+- **State Management**: Context API, useReducer
+- **Animations**: Framer Motion
+- **Data Fetching**: TanStack Query
+- **Icons**: Lucide React
+- **Build Tool**: Vite
+- **Linting**: ESLint
+- **Package Manager**: npm
 
-```css
-/* Colores principales */
---primary: #3b82f6      /* Azul principal */
---secondary: #64748b    /* Gris secundario */
---accent: #f59e0b       /* Amarillo de acento */
---background: #ffffff   /* Fondo principal */
---foreground: #0f172a   /* Texto principal */
-```
+## 🏛️ Arquitectura del Proyecto
 
-### Tipografía
+### Principios de Diseño
 
-- **Familia**: Inter (sistema de fuentes moderno)
-- **Pesos**: 400 (Regular), 500 (Medium), 600 (SemiBold), 700 (Bold)
-- **Escalas**: text-sm, text-base, text-lg, text-xl, text-2xl, text-3xl, text-4xl
+1. **Separación de Responsabilidades**: Cada archivo tiene una responsabilidad específica
+2. **Composición sobre Herencia**: Uso de composición de componentes
+3. **Inversión de Dependencias**: Contexts y providers para inyección de dependencias
+4. **Single Source of Truth**: Estado centralizado en contexts
+5. **Principio DRY**: Reutilización de componentes y lógica
 
-### Componentes Base
+### Patrones Implementados
 
-- **Button** - Botones con múltiples variantes
-- **Card** - Tarjetas de contenido
-- **Input** - Campos de entrada
-- **Badge** - Etiquetas y estados
-- **Modal** - Ventanas modales
-- **Loading** - Estados de carga
+- **Provider Pattern**: Para contexts globales
+- **Custom Hooks Pattern**: Para lógica reutilizable
+- **Compound Components**: Para componentes complejos
+- **Render Props**: Para componentes flexibles
+- **Error Boundaries**: Para manejo de errores
 
-## 🔧 Configuración Avanzada
+## 📚 Guía de Implementación Paso a Paso
 
-### Variables de Entorno
+### Fase 1: Configuración Base (Archivos de Configuración)
 
-```env
-# Desarrollo
-VITE_API_URL=http://localhost:3000/api
-VITE_APP_NAME=Demo Tienda
-VITE_APP_VERSION=1.0.0
+#### 1. `package.json` - Dependencias del Proyecto
 
-# Producción
-VITE_API_URL=https://api.demotienda.com
-VITE_ANALYTICS_ID=GA-XXXXXXXXX
-```
-
-### Configuración de TailwindCSS
-
-```js
-// tailwind.config.js
-export default {
-  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
-  theme: {
-    extend: {
-      colors: {
-        primary: {
-          50: "#eff6ff",
-          500: "#3b82f6",
-          900: "#1e3a8a",
-        },
-      },
-      fontFamily: {
-        sans: ["Inter", "system-ui", "sans-serif"],
-      },
-    },
-  },
-};
-```
-
-### Configuración de TypeScript
 
 ```json
 {
-  "compilerOptions": {
-    "target": "ES2020",
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
-    "strict": true,
-    "jsx": "react-jsx",
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./src/*"]
-    }
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router": "^6.28.0",
+    "typescript": "~5.6.2",
+    "tailwindcss": "^3.4.15",
+    "@tanstack/react-query": "^5.59.16",
+    "framer-motion": "^11.11.17"
   }
 }
 ```
 
-## 🧪 Testing
+#### 2. `vite.config.ts` - Configuración del Build Tool
 
-### Estrategia de Testing
+**Propósito**: Configura Vite para el desarrollo y build
+**Relación**: Se conecta con `package.json` para los scripts
 
-- **Unit Tests** - Componentes individuales
-- **Integration Tests** - Flujos de usuario
-- **E2E Tests** - Pruebas de extremo a extremo
+#### 3. `tailwind.config.js` - Configuración de Estilos
 
-### Herramientas
+**Propósito**: Configura TailwindCSS y tema personalizado
+**Relación**: Utilizado por todos los componentes para estilos
+
+#### 4. `tsconfig.json` - Configuración TypeScript
+
+**Propósito**: Configura TypeScript para type checking
+**Relación**: Afecta a todos los archivos `.ts` y `.tsx`
+
+### Fase 2: Tipos y Interfaces (Fundación TypeScript)
+
+#### 5. `src/types/` - Definiciones de Tipos
+
+**Orden de creación**:
+
+1. **`src/types/user.ts`** - Tipos base de usuario
+
+```typescript
+export interface User {
+  id: string;
+  email: string;
+  name: string;
+  avatar?: string;
+  role: "user" | "admin";
+  createdAt: string;
+  updatedAt: string;
+}
+```
+
+2. **`src/types/auth.ts`** - Tipos de autenticación
+
+```typescript
+export interface LoginCredentials {
+  email: string;
+  password: string;
+}
+
+export interface AuthState {
+  user: User | null;
+  isAuthenticated: boolean;
+  isLoading: boolean;
+  error: string | null;
+}
+```
+
+3. **`src/types/product.ts`** - Tipos de productos
+
+```typescript
+export interface Product {
+  id: string;
+  name: string;
+  price: number;
+  category: ProductCategory;
+  image: string;
+  description: string;
+  stock: number;
+  rating: number;
+  tags: string[];
+}
+```
+
+4. **`src/types/cart.ts`** - Tipos del carrito
+
+```typescript
+export interface CartItem {
+  id: string;
+  productId: string;
+  name: string;
+  price: number;
+  quantity: number;
+  image: string;
+}
+```
+
+**Por qué primero**: Los tipos son la base de todo el sistema TypeScript y se necesitan en todos los demás archivos.
+
+### Fase 3: Servicios y Lógica de Negocio
+
+#### 6. `src/services/auth.service.ts` - Servicio de Autenticación
+
+**Propósito**: Maneja todas las operaciones de autenticación
+**Dependencias**: Tipos de `auth.ts` y `user.ts`
+**Relación**: Utilizado por el AuthContext
+
+```typescript
+class AuthService {
+  async login(credentials: LoginCredentials): Promise<AuthResponse> {
+    // Simulación de API call
+    return {
+      user: mockUser,
+      token: "mock-jwt-token",
+      refreshToken: "mock-refresh-token",
+    };
+  }
+}
+```
+
+**Por qué aquí**: Los servicios encapsulan la lógica de negocio antes de crear los contexts.
+
+### Fase 4: Contexts (Estado Global)
+
+#### 7. `src/contexts/` - Gestión de Estado Global
+
+**Orden de creación**:
+
+1. **`src/contexts/theme-context.tsx`** - Tema de la aplicación
+
+```typescript
+interface ThemeContextType {
+  theme: "light" | "dark";
+  toggleTheme: () => void;
+}
+```
+
+2. **`src/contexts/auth-context.tsx`** - Autenticación
+
+```typescript
+interface AuthContextType {
+  user: User | null;
+  isAuthenticated: boolean;
+  login: (credentials: LoginCredentials) => Promise<void>;
+  logout: () => void;
+  register: (data: RegisterData) => Promise<void>;
+}
+```
+
+3. **`src/contexts/user-context.tsx`** - Datos del usuario
+4. **`src/contexts/cart-context.tsx`** - Carrito de compras
+
+**Relaciones**:
+
+- AuthContext usa `auth.service.ts`
+- CartContext usa tipos de `cart.ts`
+- UserContext depende de AuthContext
+
+**Por qué este orden**:
+
+- Theme es independiente (primero)
+- Auth es base para User (segundo)
+- Cart depende de User autenticado (último)
+
+### Fase 5: Custom Hooks (Lógica Reutilizable)
+
+#### 8. `src/hooks/` - Hooks Personalizados
+
+**Orden de creación**:
+
+1. **`src/hooks/use-auth.ts`** - Hook de autenticación
+
+```typescript
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within AuthProvider");
+  }
+  return context;
+};
+```
+
+2. **`src/hooks/use-cart.ts`** - Hook del carrito
+3. **`src/hooks/use-products.ts`** - Hook de productos
+4. **`src/hooks/use-categories.ts`** - Hook de categorías
+
+**Relaciones**: Cada hook corresponde a un context específico
+**Por qué aquí**: Los hooks simplifican el uso de contexts en componentes
+
+### Fase 6: Componentes UI Base (Sistema de Diseño)
+
+#### 9. `src/components/ui/` - Componentes Base
+
+**Orden de creación**:
+
+1. **`src/lib/utils.ts`** - Utilidades (cn function)
+
+```typescript
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+```
+
+2. **`src/components/ui/button.tsx`** - Componente Button
+3. **`src/components/ui/input.tsx`** - Componente Input
+4. **`src/components/ui/card.tsx`** - Componente Card
+5. **`src/components/ui/badge.tsx`** - Componente Badge
+
+**Por qué primero**: Son la base de todos los demás componentes
+
+### Fase 7: Componentes de Layout (Estructura)
+
+#### 10. `src/components/layout/` - Componentes de Layout
+
+**Orden de creación**:
+
+1. **`src/components/layout/layout.tsx`** - Layout principal
+
+```typescript
+const Layout: React.FC<LayoutProps> = ({ children }) => {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
+        <AuthProvider>
+          <UserProvider>
+            <CartProvider>{/* Estructura de la app */}</CartProvider>
+          </UserProvider>
+        </AuthProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
+  );
+};
+```
+
+2. **`src/components/layout/header.tsx`** - Header
+3. **`src/components/layout/footer.tsx`** - Footer
+4. **`src/components/layout/PageWrappers.tsx`** - Wrappers de páginas
+
+**Relaciones**:
+
+- Layout envuelve toda la aplicación con providers
+- Header usa AuthContext y CartContext
+- PageWrappers conectan con React Router
+
+### Fase 8: Componentes de Funcionalidad
+
+#### 11. `src/components/auth/` - Componentes de Autenticación
+
+**Orden de creación**:
+
+1. **`src/components/auth/LoginForm.tsx`** - Formulario de login
+2. **`src/components/auth/RegisterForm.tsx`** - Formulario de registro
+3. **`src/components/auth/AuthModal.tsx`** - Modal de autenticación
+4. **`src/components/auth/UserMenu.tsx`** - Menú de usuario
+
+**Dependencias**:
+
+- Usan `useAuth` hook
+- Utilizan componentes UI base
+- Implementan validación de formularios
+
+#### 12. `src/components/product/` - Componentes de Productos
+
+**Orden de creación**:
+
+1. **`src/components/product/ProductCard.tsx`** - Tarjeta de producto
+2. **`src/components/product/ProductGrid.tsx`** - Grid de productos
+3. **`src/components/product/CategoriesSection.tsx`** - Sección de categorías
+
+#### 13. `src/components/cart/` - Componentes del Carrito
+
+**Orden de creación**:
+
+1. **`src/components/cart/CartDrawer.tsx`** - Drawer del carrito
+
+**Dependencias**: Usa `useCart` hook y componentes UI
+
+#### 14. `src/components/common/` - Componentes Comunes
+
+1. **`src/components/common/HeroSection.tsx`** - Sección hero
+
+### Fase 9: Páginas (Vistas Principales)
+
+#### 15. `src/page/` - Páginas de la Aplicación
+
+**Orden de creación**:
+
+1. **`src/page/HomePage.tsx`** - Página de inicio
+2. **`src/page/ProductsPage.tsx`** - Página de productos
+3. **`src/page/ProductDetailPage.tsx`** - Detalle de producto
+4. **`src/page/ProfilePage.tsx`** - Perfil de usuario
+
+**Dependencias**: Cada página usa múltiples componentes y hooks
+
+### Fase 10: Configuración de Routing
+
+#### 16. `src/main.tsx` - Punto de Entrada
+
+**Propósito**: Configura React Router y renderiza la aplicación
+**Relaciones**: Conecta todas las páginas con rutas
+
+```typescript
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Layout />,
+    children: [
+      { index: true, element: <HomePageWrapper /> },
+      { path: "productos", element: <ProductsPageWrapper /> },
+      { path: "producto/:id", element: <ProductPageWrapper /> },
+    ],
+  },
+]);
+```
+
+### Fase 11: Datos y Configuración
+
+#### 17. `src/data/products.json` - Datos de Productos
+
+**Propósito**: Datos mock para desarrollo
+**Relación**: Utilizado por hooks de productos
+
+#### 18. `src/index.css` - Estilos Globales
+
+**Propósito**: Estilos base de TailwindCSS y personalizaciones
+
+## 📁 Estructura de Archivos Detallada
+
+```
+demo-tienda/
+├── 📄 package.json                 # Dependencias y scripts
+├── 📄 vite.config.ts              # Configuración Vite
+├── 📄 tailwind.config.js          # Configuración TailwindCSS
+├── 📄 tsconfig.json               # Configuración TypeScript
+├── 📄 components.json             # Configuración shadcn/ui
+├── 📄 eslint.config.js            # Configuración ESLint
+├── 📄 index.html                  # HTML base
+├── 📄 README.md                   # Documentación del proyecto
+│
+├── 📁 public/                     # Archivos estáticos
+│   └── 📄 vite.svg
+│
+└── 📁 src/                        # Código fuente
+    ├── 📄 main.tsx                # Punto de entrada + Router
+    ├── 📄 App.tsx                 # Componente App legacy
+    ├── 📄 index.css               # Estilos globales
+    ├── 📄 vite-env.d.ts          # Tipos de Vite
+    │
+    ├── 📁 types/                  # Definiciones TypeScript
+    │   ├── 📄 auth.ts             # Tipos de autenticación
+    │   ├── 📄 user.ts             # Tipos de usuario
+    │   ├── 📄 product.ts          # Tipos de productos
+    │   └── 📄 cart.ts             # Tipos del carrito
+    │
+    ├── 📁 services/               # Lógica de negocio
+    │   └── 📄 auth.service.ts     # Servicio de autenticación
+    │
+    ├── 📁 contexts/               # Estado global
+    │   ├── 📄 theme-context.tsx   # Context del tema
+    │   ├── 📄 auth-context.tsx    # Context de autenticación
+    │   ├── 📄 user-context.tsx    # Context del usuario
+    │   ├── 📄 user-context-types.ts # Tipos del user context
+    │   ├── 📄 cart-context.tsx    # Context del carrito
+    │   └── 📄 cart-context-types.ts # Tipos del cart context
+    │
+    ├── 📁 hooks/                  # Custom hooks
+    │   ├── 📄 index.ts            # Barrel export
+    │   ├── 📄 use-auth.ts         # Hook de autenticación
+    │   ├── 📄 use-user.ts         # Hook de usuario
+    │   ├── 📄 use-cart.ts         # Hook del carrito
+    │   ├── 📄 use-products.ts     # Hook de productos
+    │   └── 📄 use-categories.ts   # Hook de categorías
+    │
+    ├── 📁 lib/                    # Utilidades
+    │   └── 📄 utils.ts            # Funciones utilitarias (cn)
+    │
+    ├── 📁 components/             # Componentes React
+    │   ├── 📁 ui/                 # Sistema de diseño base
+    │   │   ├── 📄 button.tsx      # Componente Button
+    │   │   ├── 📄 input.tsx       # Componente Input
+    │   │   ├── 📄 card.tsx        # Componente Card
+    │   │   ├── 📄 badge.tsx       # Componente Badge
+    │   │   ├── 📄 label.tsx       # Componente Label
+    │   │   ├── 📄 form.tsx        # Componente Form
+    │   │   ├── 📄 carousel.tsx    # Componente Carousel
+    │   │   ├── 📄 loading.tsx     # Componente Loading
+    │   │   ├── 📄 loading.css     # Estilos del loading
+    │   │   └── 📄 loading-variants.ts # Variantes del loading
+    │   │
+    │   ├── 📁 layout/             # Componentes de layout
+    │   │   ├── 📄 layout.tsx      # Layout principal + Providers
+    │   │   ├── 📄 header.tsx      # Header con navegación
+    │   │   ├── 📄 footer.tsx      # Footer
+    │   │   └── 📄 PageWrappers.tsx # Wrappers para React Router
+    │   │
+    │   ├── 📁 auth/               # Autenticación
+    │   │   ├── 📄 AuthModal.tsx   # Modal de auth
+    │   │   ├── 📄 LoginForm.tsx   # Formulario de login
+    │   │   ├── 📄 RegisterForm.tsx # Formulario de registro
+    │   │   └── 📄 UserMenu.tsx    # Menú de usuario
+    │   │
+    │   ├── 📁 product/            # Productos
+    │   │   ├── 📄 ProductCard.tsx # Tarjeta de producto
+    │   │   ├── 📄 ProductGrid.tsx # Grid con filtros
+    │   │   └── 📄 CategoriesSection.tsx # Sección de categorías
+    │   │
+    │   ├── 📁 cart/               # Carrito de compras
+    │   │   └── 📄 CartDrawer.tsx  # Drawer del carrito
+    │   │
+    │   ├── 📁 common/             # Componentes comunes
+    │   │   └── 📄 HeroSection.tsx # Sección hero
+    │   │
+    │   └── 📁 custom/             # Componentes personalizados
+    │       ├── 📄 hero.tsx        # Hero personalizado
+    │       ├── 📄 product-grid.tsx # Grid personalizado
+    │       └── 📄 search.tsx      # Búsqueda personalizada
+    │
+    ├── 📁 page/                   # Páginas principales
+    │   ├── 📄 HomePage.tsx        # Página de inicio
+    │   ├── 📄 ProductsPage.tsx    # Página de productos
+    │   ├── 📄 ProductDetailPage.tsx # Detalle del producto
+    │   └── 📄 ProfilePage.tsx     # Perfil de usuario
+    │
+    ├── 📁 data/                   # Datos mock
+    │   └── 📄 products.json       # Productos de ejemplo
+    │
+    └── 📁 assets/                 # Assets estáticos
+        └── 📄 react.svg
+```
+
+## 🔗 Relaciones Entre Archivos
+
+### Flujo de Dependencias
+
+```
+main.tsx (Entry Point)
+    ↓
+Layout.tsx (Providers Stack)
+    ↓
+Header/Footer (Navigation)
+    ↓
+Pages (Views)
+    ↓
+Components (UI Elements)
+    ↓
+Hooks (Logic)
+    ↓
+Contexts (State)
+    ↓
+Services (Business Logic)
+    ↓
+Types (TypeScript Definitions)
+```
+
+### Jerarquía de Providers
+
+```typescript
+// Layout.tsx - Jerarquía de contexts
+<QueryClientProvider>
+  {" "}
+  // React Query
+  <ThemeProvider>
+    {" "}
+    // Tema claro/oscuro
+    <AuthProvider>
+      {" "}
+      // Autenticación ← CRÍTICO
+      <UserProvider>
+        {" "}
+        // Datos del usuario
+        <CartProvider>
+          {" "}
+          // Carrito de compras
+          <App />
+        </CartProvider>
+      </UserProvider>
+    </AuthProvider>
+  </ThemeProvider>
+</QueryClientProvider>
+```
+
+### Dependencias de Componentes
+
+1. **Header** depende de:
+
+   - `useAuth` (autenticación)
+   - `useCart` (carrito)
+   - Componentes UI (Button, etc.)
+
+2. **ProductGrid** depende de:
+
+   - `useProducts` (datos)
+   - `useCategories` (filtros)
+   - ProductCard component
+
+3. **AuthModal** depende de:
+   - `useAuth` (autenticación)
+   - LoginForm/RegisterForm
+   - Componentes UI
+
+## 🚀 Instalación y Configuración
+
+### Prerrequisitos
+
+- Node.js 18+
+- npm o yarn
+
+### Pasos de Instalación
+
+1. **Clonar el repositorio**
 
 ```bash
-# Instalar dependencias de testing
-npm install -D @testing-library/react @testing-library/jest-dom vitest
-
-# Ejecutar tests
-npm run test
-npm run test:watch
-npm run test:coverage
+git clone <repository-url>
+cd demo-tienda
 ```
+
+2. **Instalar dependencias**
+
+```bash
+npm install
+```
+
+3. **Configurar variables de entorno** (opcional)
+
+```bash
+cp .env.example .env
+```
+
+4. **Iniciar el servidor de desarrollo**
+
+```bash
+npm run dev
+```
+
+5. **Abrir en el navegador**
+
+```
+http://localhost:5174
+```
+
+## 📜 Scripts Disponibles
+
+```bash
+# Desarrollo
+npm run dev          # Inicia servidor de desarrollo
+npm run build        # Construye para producción
+npm run preview      # Vista previa del build
+
+# Calidad de código
+npm run lint         # Ejecuta ESLint
+npm run lint:fix     # Corrige errores de ESLint automáticamente
+
+# Utilidades
+npm run type-check   # Verifica tipos de TypeScript
+```
+
+## 🎯 Patrones de Diseño Implementados
+
+### 1. Provider Pattern
+
+**Archivos**: `src/contexts/*.tsx`
+**Propósito**: Gestión de estado global
+
+```typescript
+export function AuthProvider({ children }: AuthProviderProps) {
+  const [state, dispatch] = useReducer(authReducer, initialState);
+  return (
+    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
+  );
+}
+```
+
+### 2. Custom Hooks Pattern
+
+**Archivos**: `src/hooks/*.ts`
+**Propósito**: Lógica reutilizable
+
+```typescript
+export function useAuth() {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within AuthProvider");
+  }
+  return context;
+}
+```
+
+### 3. Compound Components
+
+**Archivos**: `src/components/ui/*.tsx`
+**Propósito**: Componentes flexibles
+
+```typescript
+const Card = ({ children, ...props }) => (
+  <div className="card" {...props}>
+    {children}
+  </div>
+);
+Card.Header = ({ children }) => <div className="card-header">{children}</div>;
+Card.Body = ({ children }) => <div className="card-body">{children}</div>;
+```
+
+### 4. Error Boundaries
+
+**Archivos**: Layout y componentes principales
+**Propósito**: Manejo de errores
+
+```typescript
+class ErrorBoundary extends Component {
+  componentDidCatch(error, errorInfo) {
+    console.error("Error caught by boundary:", error, errorInfo);
+  }
+}
+```
+
+## 🔍 Decisiones de Arquitectura
+
+### ¿Por qué Context API en lugar de Redux?
+
+- **Simplicidad**: Para este proyecto, Context API es suficiente
+- **Menos boilerplate**: Menos código para mantener
+- **TypeScript integration**: Mejor integración nativa con TS
+
+### ¿Por qué Custom Hooks?
+
+- **Reutilización**: Lógica compartida entre componentes
+- **Separación de responsabilidades**: UI separada de lógica
+- **Testing**: Más fácil de testear la lógica por separado
+
+### ¿Por qué TailwindCSS?
+
+- **Utility-first**: Desarrollo más rápido
+- **Consistencia**: Sistema de diseño coherente
+- **Performance**: CSS optimizado en producción
+
+### ¿Por qué Vite?
+
+- **Velocidad**: Hot reload instantáneo
+- **Modern**: Soporte nativo para ES modules
+- **TypeScript**: Soporte de primera clase para TS
+
+## 🧪 Testing (Futuro)
+
+### Estructura de Testing Recomendada
+
+```
+src/
+├── __tests__/
+│   ├── components/
+│   ├── hooks/
+│   ├── contexts/
+│   └── services/
+├── __mocks__/
+└── test-utils.tsx
+```
+
+### Herramientas Recomendadas
+
+- **Vitest**: Testing framework
+- **Testing Library**: Testing de componentes
+- **MSW**: Mocking de APIs
 
 ## 🚀 Deployment
 
-### Build de Producción
+### Build para Producción
 
 ```bash
-# Generar build optimizada
 npm run build
-
-# Previsualizar build
-npm run preview
 ```
 
-### Opciones de Deployment
+### Opciones de Deploy
 
-- **Vercel** - Deployment automático desde Git
-- **Netlify** - Hosting con CI/CD integrado
-- **GitHub Pages** - Hosting gratuito
-- **Docker** - Containerización para cualquier plataforma
-
-### Dockerfile
-
-```dockerfile
-FROM node:18-alpine AS builder
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci
-COPY . .
-RUN npm run build
-
-FROM nginx:alpine
-COPY --from=builder /app/dist /usr/share/nginx/html
-EXPOSE 80
-```
-
-## 🔄 Roadmap
-
-### Próximas Características
-
-- [ ] **Autenticación de Usuarios** - Login/Register
-- [ ] **Wishlist** - Lista de deseos
-- [ ] **Comparador de Productos** - Comparación lado a lado
-- [ ] **Reseñas y Ratings** - Sistema de calificaciones
-- [ ] **Checkout Completo** - Proceso de compra
-- [ ] **Panel de Admin** - Gestión de productos
-- [ ] **PWA** - Aplicación web progresiva
-- [ ] **Internacionalización** - Múltiples idiomas
-- [ ] **Tema Oscuro** - Modo oscuro/claro
-- [ ] **Notificaciones Push** - Alertas en tiempo real
-
-### Mejoras Técnicas
-
-- [ ] **Tests Automatizados** - Cobertura completa
-- [ ] **Storybook** - Documentación de componentes
-- [ ] **Performance Monitoring** - Métricas de rendimiento
-- [ ] **Error Tracking** - Monitoreo de errores
-- [ ] **Analytics** - Seguimiento de eventos
-- [ ] **SEO Optimization** - Mejoras de SEO
+- **Vercel**: Deploy automático desde Git
+- **Netlify**: Deploy con CI/CD
+- **GitHub Pages**: Para proyectos estáticos
 
 ## 🤝 Contribución
 
-### Cómo Contribuir
+### Flujo de Contribución
 
-1. Fork el proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
+1. Fork del repositorio
+2. Crear rama feature: `git checkout -b feature/nueva-funcionalidad`
+3. Commit cambios: `git commit -m 'Add nueva funcionalidad'`
+4. Push a la rama: `git push origin feature/nueva-funcionalidad`
+5. Crear Pull Request
 
 ### Estándares de Código
 
-- Usar **TypeScript** para todo el código
-- Seguir las reglas de **ESLint**
-- Escribir **tests** para nuevas funcionalidades
-- Documentar **componentes complejos**
-- Usar **commits convencionales**
+- **TypeScript**: Tipado estricto
+- **ESLint**: Seguir las reglas configuradas
+- **Prettier**: Formateo consistente
+- **Conventional Commits**: Mensajes de commit descriptivos
 
-### Commits Convencionales
+## 📝 Credenciales de Demo
 
-```
-feat: añadir nueva funcionalidad
-fix: corregir bug
-docs: actualizar documentación
-style: cambios de formato
-refactor: refactorización de código
-test: añadir tests
-chore: tareas de mantenimiento
-```
+Para probar la autenticación:
+
+- **Email**: `demo@tienda.com`
+- **Password**: `demo123`
 
 ## 📄 Licencia
 
-Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
-
-## 👥 Equipo
-
-- **Desarrollador Principal** - [@tu-usuario](https://github.com/tu-usuario)
-- **Diseño UI/UX** - Equipo de diseño
-- **QA Testing** - Equipo de calidad
-
-## 📞 Soporte
-
-¿Tienes preguntas o necesitas ayuda?
-
-- 📧 **Email**: soporte@demotienda.com
-- 💬 **Discord**: [Servidor de la comunidad](https://discord.gg/demotienda)
-- 🐛 **Issues**: [GitHub Issues](https://github.com/tu-usuario/demo-tienda/issues)
-- 📖 **Documentación**: [Wiki del proyecto](https://github.com/tu-usuario/demo-tienda/wiki)
-
-## 🙏 Agradecimientos
-
-- **React Team** - Por la increíble biblioteca
-- **Vite Team** - Por la herramienta de build ultrarrápida
-- **TailwindCSS** - Por el framework de CSS
-- **Radix UI** - Por los componentes accesibles
-- **Comunidad Open Source** - Por las increíbles herramientas
+MIT License - ver el archivo [LICENSE](LICENSE) para más detalles.
 
 ---
 
-<div align="center">
-  <p>Hecho con ❤️ por el equipo de Demo Tienda</p>
-  <p>
-    <a href="#-demo-tienda---e-commerce-moderno">Volver arriba</a>
-  </p>
-</div>
+**Desarrollado con ❤️ usando React + TypeScript + TailwindCSS**
