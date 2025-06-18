@@ -11,7 +11,7 @@
  * 7. View Modes - Cambio entre vista grid y lista
  */
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, Filter, Grid3X3, List, X } from "lucide-react";
 
@@ -86,6 +86,15 @@ function useProductFilters(initialFilters: ProductSearchParams = {}) {
   const [filters, setFilters] = useState<ProductSearchParams>(initialFilters);
   const [searchQuery, setSearchQuery] = useState(initialFilters.query || "");
 
+  // Sincronizar con cambios externos de initialFilters
+  useEffect(() => {
+    setFilters(initialFilters);
+    setSearchQuery(initialFilters.query || "");
+  }, [JSON.stringify(initialFilters)]);
+
+  // Memoizar el objeto de filtros para evitar re-renders innecesarios
+  const memoizedFilters = useMemo(() => filters, [filters]);
+
   // Debounce de la búsqueda para evitar muchas requests
   const debouncedUpdateSearch = useMemo(
     () =>
@@ -122,7 +131,7 @@ function useProductFilters(initialFilters: ProductSearchParams = {}) {
   };
 
   return {
-    filters,
+    filters: memoizedFilters,
     searchQuery,
     updateSearch,
     updateFilter,

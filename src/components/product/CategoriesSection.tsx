@@ -248,8 +248,8 @@ export function CategoriesSection({
  * Componente compacto de categorías para sidebar o header
  */
 interface CompactCategoriesProps {
-  onCategoryClick?: (category: ProductCategory) => void;
-  activeCategory?: ProductCategory;
+  onCategoryClick?: (category: string) => void;
+  activeCategory?: string;
   className?: string;
 }
 
@@ -258,6 +258,11 @@ export function CompactCategories({
   activeCategory,
   className,
 }: CompactCategoriesProps) {
+  const handleClick = (categoryId: string) => {
+    console.log("🔄 CompactCategories: Click en categoría:", categoryId);
+    onCategoryClick?.(categoryId);
+  };
+
   return (
     <div className={cn("flex flex-wrap gap-2", className)}>
       {categoriesData.map((category) => {
@@ -269,7 +274,7 @@ export function CompactCategories({
             key={category.id}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => onCategoryClick?.(category.id)}
+            onClick={() => handleClick(category.id)}
             className={cn(
               "flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200",
               isActive

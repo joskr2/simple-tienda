@@ -11,17 +11,11 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
-import {
-  ArrowLeft,
-  X,
-} from "lucide-react";
+import { ArrowLeft, X } from "lucide-react";
 
 import { Button } from "../components/ui/button";
 import { Badge } from "../components/ui/badge";
-import {
-  Card,
-  CardContent,
-} from "../components/ui/card";
+import { Card, CardContent } from "../components/ui/card";
 
 import { ProductGrid } from "../components/product/ProductGrid";
 import { CompactCategories } from "../components/product/CategoriesSection";
@@ -36,6 +30,7 @@ interface ProductsPageProps {
   initialCategory?: string;
   onNavigateToProduct: (productId: string) => void;
   onNavigateBack: () => void;
+  onCategoryChange?: (category?: string) => void;
 }
 
 /**
@@ -60,6 +55,7 @@ function Breadcrumb({ items }: BreadcrumbProps) {
             <span className="font-medium text-foreground">{item.label}</span>
           ) : (
             <button
+              type="button"
               onClick={item.onClick}
               className="text-muted-foreground hover:text-foreground transition-colors"
             >
@@ -80,7 +76,7 @@ interface ProductsHeaderProps {
   subtitle?: string;
   category?: ProductCategory;
   onNavigateBack: () => void;
-  onCategoryChange: (category?: ProductCategory) => void;
+  onCategoryChange: (category?: string) => void;
 }
 
 function ProductsHeader({
@@ -163,7 +159,7 @@ function ProductsHeader({
 
         <CompactCategories
           activeCategory={category}
-          onCategoryClick={onCategoryChange}
+          onCategoryClick={(cat) => onCategoryChange(cat)}
           className="flex-wrap"
         />
       </motion.div>
@@ -181,6 +177,7 @@ export function ProductsPage({
   initialCategory,
   onNavigateToProduct,
   onNavigateBack,
+  onCategoryChange,
 }: ProductsPageProps) {
   const [selectedCategory, setSelectedCategory] = useState<
     ProductCategory | undefined
@@ -206,23 +203,58 @@ export function ProductsPage({
   /**
    * Maneja el cambio de categoría
    */
-  const handleCategoryChange = useCallback((category?: ProductCategory) => {
-    setSelectedCategory(category);
-    setFilters((prev) => ({
-      ...prev,
-      category,
-      page: 1, // Reset página al cambiar categoría
-    }));
-  }, []);
+  const handleCategoryChange = useCallback(
+    (category?: string) => {
+      console.log("🔄 ProductsPage: handleCategoryChange recibió:", category);
+
+      const categoryType = category as ProductCategory | undefined;
+      setSelectedCategory(categoryType);
+      setFilters((prev) => ({
+        ...prev,
+        category: categoryType,
+        page: 1, // Reset página al cambiar categoría
+      }));
+
+      // Notificar al componente padre para actualizar la URL
+      if (onCategoryChange) {
+        onCategoryChange(category);
+      }
+    },
+    [onCategoryChange]
+  );
 
   /**
-   * Efecto para sincronizar categoría inicial
+   * Efecto para sincronizar categoría inicial (solo cuando realmente cambia desde fuera)
    */
   useEffect(() => {
-    if (initialCategory && initialCategory !== selectedCategory) {
-      handleCategoryChange(initialCategory as ProductCategory);
+    if (initialCategory !== selectedCategory) {
+      console.log(
+        "🔄 ProductsPage: Sincronizando categoría inicial:",
+        initialCategory,
+        "→",
+        selectedCategory
+      );
+      const categoryType = initialCategory as ProductCategory | undefined;
+      setSelectedCategory(categoryType);
+      setFilters((prev) => ({
+        ...prev,
+        category: categoryType,
+        page: 1,
+      }));
+      // NO llamamos a onCategoryChange aquí para evitar bucles
     }
-  }, [initialCategory, selectedCategory, handleCategoryChange]);
+  }, [initialCategory]); // Solo depende de initialCategory
+
+  /**
+   * Efecto para actualizar filtros cuando cambia la categoría seleccionada
+   */
+  useEffect(() => {
+    setFilters((prev) => ({
+      ...prev,
+      category: selectedCategory,
+      page: 1,
+    }));
+  }, [selectedCategory]);
 
   return (
     <main className="min-h-screen bg-background">

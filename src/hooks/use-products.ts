@@ -5,7 +5,7 @@
  * búsqueda, filtrado, ordenamiento y paginación.
  */
 
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import type {
   Product,
@@ -136,6 +136,11 @@ const sortProducts = (
 export function useProducts(initialParams: ProductSearchParams = {}) {
   const [searchParams, setSearchParams] =
     useState<ProductSearchParams>(initialParams);
+
+  // Sincronizar con cambios externos de initialParams
+  useEffect(() => {
+    setSearchParams(initialParams);
+  }, [JSON.stringify(initialParams)]);
 
   // Query para obtener productos
   const {

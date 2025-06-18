@@ -21,14 +21,28 @@ export function HomePageWrapper() {
 // Wrapper para ProductsPage con navegación y parámetros
 export function ProductsPageWrapper() {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const initialCategory = searchParams.get("categoria") || undefined;
+
+  const handleCategoryChange = (category?: string) => {
+    console.log(
+      "🔄 ProductsPageWrapper: handleCategoryChange recibió:",
+      category
+    );
+
+    if (category) {
+      setSearchParams({ categoria: category });
+    } else {
+      setSearchParams({});
+    }
+  };
 
   return (
     <ProductsPage
       initialCategory={initialCategory}
       onNavigateToProduct={(productId) => navigate(`/producto/${productId}`)}
       onNavigateBack={() => navigate("/")}
+      onCategoryChange={handleCategoryChange}
     />
   );
 }
@@ -38,11 +52,31 @@ export function CategoryPageWrapper() {
   const navigate = useNavigate();
   const { categoria } = useParams();
 
+  const handleCategoryChange = (category?: string) => {
+    console.log(
+      "🔄 CategoryPageWrapper: handleCategoryChange recibió:",
+      category
+    );
+    console.log("🔄 CategoryPageWrapper: categoria param:", categoria);
+
+    if (category) {
+      console.log(
+        "🔄 CategoryPageWrapper: Navegando a /productos?categoria=",
+        category
+      );
+      navigate(`/productos?categoria=${category}`);
+    } else {
+      console.log("🔄 CategoryPageWrapper: Navegando a /productos");
+      navigate("/productos");
+    }
+  };
+
   return (
     <ProductsPage
       initialCategory={categoria}
       onNavigateToProduct={(productId) => navigate(`/producto/${productId}`)}
       onNavigateBack={() => navigate("/")}
+      onCategoryChange={handleCategoryChange}
     />
   );
 }
