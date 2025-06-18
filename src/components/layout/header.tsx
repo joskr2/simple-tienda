@@ -1,4 +1,3 @@
-import SearchForm from "./search";
 
 const Header = () => {
   return (
@@ -8,14 +7,7 @@ const Header = () => {
           <h1 className="text-2xl font-bold">Mi Tienda Virtual</h1>
         </a>
 
-        <nav>
-          <ul className="flex space-x-4">
-             <li>
-              <SearchForm />
-            </li> 
 
-          </ul>
-        </nav>
       </div>
     </header>
   );
