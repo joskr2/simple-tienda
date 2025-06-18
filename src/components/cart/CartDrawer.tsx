@@ -18,7 +18,6 @@ import {
   Minus,
   ShoppingCart,
   Trash2,
-  Tag,
   CreditCard,
   ArrowRight,
   Gift,
@@ -54,24 +53,47 @@ interface CartDrawerProps {
  */
 const availableCoupons: Coupon[] = [
   {
+    id: "1",
     code: "WELCOME10",
     type: "percentage",
     value: 10,
+    description: "10% de descuento en tu primera compra",
+    minPurchase: 50,
     minOrderAmount: 50,
+    validFrom: new Date().toISOString(),
+    validUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+    usageCount: 0,
+    applicable: {},
+    active: true,
     isActive: true,
   },
   {
+    id: "2",
     code: "SHIP5",
     type: "fixed",
     value: 5,
+    description: "$5 de descuento en envío",
+    validFrom: new Date().toISOString(),
+    validUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+    usageCount: 0,
+    applicable: {},
+    active: true,
     isActive: true,
   },
   {
+    id: "3",
     code: "SAVE20",
     type: "percentage",
     value: 20,
+    description: "20% de descuento en compras mayores a $100",
+    minPurchase: 100,
     minOrderAmount: 100,
     maxDiscount: 50,
+    validFrom: new Date().toISOString(),
+    validUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+    usageCount: 0,
+    applicable: {},
+    active: true,
     isActive: true,
   },
 ];
@@ -92,8 +114,39 @@ function CartItemComponent({
 }: CartItemComponentProps) {
   const [isUpdating, setIsUpdating] = useState(false);
 
-  const primaryImage =
-    item.product.images.find((img) => img.isPrimary) || item.product.images[0];
+  // Manejo seguro de imágenes que pueden ser string o objeto
+  const getImageData = (
+    images: Array<
+      | string
+      | { url: string; thumbnail?: string; alt?: string; isPrimary?: boolean }
+    >
+  ) => {
+    const primaryImage = images.find(
+      (img) => typeof img === "object" && img.isPrimary
+    );
+    const firstImage = images[0];
+
+    if (typeof primaryImage === "object") {
+      return {
+        src: primaryImage.thumbnail || primaryImage.url,
+        alt: primaryImage.alt || item.product.title || item.product.name,
+      };
+    }
+
+    if (typeof firstImage === "object") {
+      return {
+        src: firstImage.thumbnail || firstImage.url,
+        alt: firstImage.alt || item.product.title || item.product.name,
+      };
+    }
+
+    return {
+      src: typeof firstImage === "string" ? firstImage : item.product.thumbnail,
+      alt: item.product.title || item.product.name,
+    };
+  };
+
+  const imageData = getImageData(item.product.images);
 
   const handleQuantityChange = async (newQuantity: number) => {
     if (newQuantity < 1 || newQuantity > 99) return;
@@ -116,8 +169,8 @@ function CartItemComponent({
       {/* Imagen del producto */}
       <div className="flex-shrink-0">
         <img
-          src={primaryImage?.thumbnail || primaryImage?.url}
-          alt={primaryImage?.alt || item.product.title}
+          src={imageData.src}
+          alt={imageData.alt}
           className="w-16 h-16 object-cover rounded-lg bg-muted"
         />
       </div>
@@ -125,24 +178,24 @@ function CartItemComponent({
       {/* Información del producto */}
       <div className="flex-1 min-w-0">
         <h4 className="font-medium text-sm mb-1 line-clamp-2">
-          {truncateText(item.product.title, 60)}
+          {truncateText(item.product.title || item.product.name, 60)}
         </h4>
 
         {/* Variante */}
-        {item.variant && (
+        {(item.variant || item.selectedVariant) && (
           <p className="text-xs text-muted-foreground mb-2">
-            {item.variant.name}
+            {(item.variant || item.selectedVariant)?.name}
           </p>
         )}
 
         {/* Precio */}
         <div className="flex items-center justify-between mb-3">
           <span className="font-semibold text-primary">
-            {formatPrice(item.priceAtAddTime)}
+            {formatPrice(item.priceAtAddTime || item.unitPrice)}
           </span>
 
           {/* Precio diferente al original */}
-          {item.priceAtAddTime !== item.product.price && (
+          {(item.priceAtAddTime || item.unitPrice) !== item.product.price && (
             <Badge variant="outline" className="text-xs">
               Precio al agregar
             </Badge>
@@ -196,7 +249,7 @@ function CartItemComponent({
         {/* Subtotal */}
         <div className="mt-2 text-right">
           <span className="text-sm font-medium">
-            Subtotal: {formatPrice(item.subtotal)}
+            Subtotal: {formatPrice(item.subtotal || item.totalPrice)}
           </span>
         </div>
       </div>
@@ -264,14 +317,12 @@ function CouponSection({
             value={couponCode}
             onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
             onKeyPress={handleKeyPress}
-            startIcon={<Tag className="h-4 w-4" />}
             className="flex-1"
           />
           <LoadingButton
             loading={isApplying}
             onClick={handleApplyCoupon}
             disabled={!couponCode.trim()}
-            size="sm"
             className="px-6"
           >
             Aplicar
@@ -561,7 +612,6 @@ export function CartDrawer({
                       loading={isCheckingOut}
                       onClick={handleCheckout}
                       className="w-full gap-2"
-                      size="lg"
                     >
                       <CreditCard className="h-4 w-4" />
                       {isCheckingOut ? "Procesando..." : "Proceder al pago"}

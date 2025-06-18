@@ -5,9 +5,14 @@
  * cálculos automáticos y manejo de estado optimizado.
  */
 
-import { useReducer, useEffect } from "react";
+import { useReducer, useEffect, useState } from "react";
 import type { ReactNode } from "react";
-import type { CartState, CartItem, AddToCartPayload } from "../types/cart";
+import type {
+  CartState,
+  CartItem,
+  AddToCartPayload,
+  Coupon,
+} from "../types/cart";
 import {
   CART_CONSTANTS,
   calculateCartSummary,
@@ -21,6 +26,8 @@ type CartAction =
   | { type: "REMOVE_ITEM"; payload: { itemId: string } }
   | { type: "UPDATE_QUANTITY"; payload: { itemId: string; quantity: number } }
   | { type: "CLEAR_CART" }
+  | { type: "APPLY_COUPON"; payload: { coupon: Coupon } }
+  | { type: "REMOVE_COUPON"; payload: { couponCode: string } }
   | { type: "RESTORE_CART"; payload: { cart: CartState } };
 
 // Estado inicial del carrito
@@ -37,6 +44,7 @@ const initialCartState: CartState = {
     itemCount: 0,
     uniqueItems: 0,
   },
+  appliedCoupons: [],
   lastUpdated: new Date().toISOString(),
   sessionId: crypto.randomUUID(),
 };
@@ -65,10 +73,12 @@ function cartReducer(state: CartState, action: CartAction): CartState {
               item.quantity + quantity,
               CART_CONSTANTS.MAX_QUANTITY_PER_ITEM
             );
+            const newTotalPrice = item.unitPrice * newQuantity;
             return {
               ...item,
               quantity: newQuantity,
-              totalPrice: item.unitPrice * newQuantity,
+              totalPrice: newTotalPrice,
+              subtotal: newTotalPrice, // Alias para totalPrice
             };
           }
           return item;
@@ -85,8 +95,11 @@ function cartReducer(state: CartState, action: CartAction): CartState {
           product,
           quantity,
           selectedVariant,
+          variant: selectedVariant,
           unitPrice,
+          priceAtAddTime: unitPrice,
           totalPrice: unitPrice * quantity,
+          subtotal: unitPrice * quantity,
           addedAt: new Date().toISOString(),
           notes,
         };
@@ -144,10 +157,12 @@ function cartReducer(state: CartState, action: CartAction): CartState {
             quantity,
             CART_CONSTANTS.MAX_QUANTITY_PER_ITEM
           );
+          const newTotalPrice = item.unitPrice * newQuantity;
           return {
             ...item,
             quantity: newQuantity,
-            totalPrice: item.unitPrice * newQuantity,
+            totalPrice: newTotalPrice,
+            subtotal: newTotalPrice, // Alias para totalPrice
           };
         }
         return item;
@@ -167,6 +182,52 @@ function cartReducer(state: CartState, action: CartAction): CartState {
       return {
         ...initialCartState,
         sessionId: state.sessionId,
+      };
+    }
+
+    case "APPLY_COUPON": {
+      const { coupon } = action.payload;
+      const newSummary = calculateCartSummary(state.items);
+
+      // Calcular descuento del cupón
+      let couponDiscount = 0;
+      if (coupon.type === "percentage") {
+        couponDiscount = (newSummary.subtotal * coupon.value) / 100;
+        if (coupon.maxDiscount) {
+          couponDiscount = Math.min(couponDiscount, coupon.maxDiscount);
+        }
+      } else if (coupon.type === "fixed") {
+        couponDiscount = coupon.value;
+      }
+
+      return {
+        ...state,
+        summary: {
+          ...newSummary,
+          couponDiscount,
+          total:
+            newSummary.subtotal +
+            newSummary.shipping +
+            newSummary.tax -
+            couponDiscount,
+        },
+        appliedCoupons: [...state.appliedCoupons, coupon],
+        lastUpdated: new Date().toISOString(),
+      };
+    }
+
+    case "REMOVE_COUPON": {
+      const { couponCode } = action.payload;
+      const newAppliedCoupons = state.appliedCoupons.filter(
+        (c) => c.code !== couponCode
+      );
+      const newSummary = calculateCartSummary(state.items);
+
+      return {
+        ...state,
+        summary: newSummary,
+        appliedCoupons: newAppliedCoupons,
+        lastUpdated: new Date().toISOString(),
       };
     }
 
@@ -193,6 +254,7 @@ interface CartProviderProps {
 
 export function CartProvider({ children }: CartProviderProps) {
   const [cart, dispatch] = useReducer(cartReducer, initialCartState);
+  const [error, setError] = useState<string | null>(null);
 
   // Cargar carrito del localStorage al inicializar
   useEffect(() => {
@@ -250,8 +312,38 @@ export function CartProvider({ children }: CartProviderProps) {
     return cart.summary.total;
   };
 
+  const applyCoupon = async (coupon: Coupon) => {
+    try {
+      setError(null);
+      // Validar cupón
+      if (!coupon.isActive || !coupon.active) {
+        throw new Error("El cupón no está activo");
+      }
+
+      if (
+        coupon.minOrderAmount &&
+        cart.summary.subtotal < coupon.minOrderAmount
+      ) {
+        throw new Error(`Compra mínima requerida: $${coupon.minOrderAmount}`);
+      }
+
+      dispatch({ type: "APPLY_COUPON", payload: { coupon } });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Error al aplicar cupón");
+    }
+  };
+
+  const removeCoupon = (couponCode: string) => {
+    dispatch({ type: "REMOVE_COUPON", payload: { couponCode } });
+  };
+
+  const clearError = () => {
+    setError(null);
+  };
+
   const value: CartContextValue = {
     cart,
+    state: cart, // Alias para cart
     addToCart,
     removeFromCart,
     updateQuantity,
@@ -260,6 +352,10 @@ export function CartProvider({ children }: CartProviderProps) {
     isInCart,
     getTotalItems,
     getTotalPrice,
+    applyCoupon,
+    removeCoupon,
+    error,
+    clearError,
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

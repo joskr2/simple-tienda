@@ -22,7 +22,11 @@ const fetchProducts = async (
   // Simular delay de API
   await new Promise((resolve) => setTimeout(resolve, 300));
 
-  let filteredProducts = [...productsData] as Product[];
+  // Agregar title como alias de name a todos los productos
+  let filteredProducts = [...productsData].map((product) => ({
+    ...product,
+    title: product.name, // Agregar title como alias de name
+  })) as Product[];
 
   // Filtrar por categoría
   if (params.category) {

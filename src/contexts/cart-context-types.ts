@@ -12,12 +12,19 @@ import type { CartState, AddToCartPayload } from "../types/cart";
 export interface CartContextValue {
   // Estado
   cart: CartState;
+  state: CartState; // Alias para cart
 
   // Acciones
   addToCart: (payload: AddToCartPayload) => void;
   removeFromCart: (itemId: string) => void;
   updateQuantity: (itemId: string, quantity: number) => void;
   clearCart: () => void;
+  applyCoupon: (coupon: any) => Promise<void> | void;
+  removeCoupon: (couponCode: string) => void;
+
+  // Estado de error
+  error: string | null;
+  clearError: () => void;
 
   // Utilidades
   getItemQuantity: (productId: string) => number;

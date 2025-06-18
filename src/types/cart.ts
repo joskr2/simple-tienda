@@ -20,8 +20,17 @@ export interface CartItem {
     value: string;
     additionalPrice?: number; // Precio adicional por la variante
   };
+  variant?: {
+    // Alias para selectedVariant para compatibilidad
+    id: string;
+    name: string;
+    value: string;
+    additionalPrice?: number;
+  };
   unitPrice: number; // Precio unitario al momento de agregar
+  priceAtAddTime: number; // Precio al momento de agregar (alias para unitPrice)
   totalPrice: number; // Precio total (unitPrice * quantity)
+  subtotal: number; // Subtotal del item (alias para totalPrice)
   addedAt: string; // Fecha de agregado al carrito (ISO string)
   notes?: string; // Notas especiales del cliente
 }
@@ -34,6 +43,7 @@ export interface Coupon {
   value: number; // Valor del descuento (% o cantidad fija)
   description: string; // Descripción del cupón
   minPurchase?: number; // Compra mínima requerida
+  minOrderAmount?: number; // Alias para minPurchase
   maxDiscount?: number; // Descuento máximo (para porcentajes)
   validFrom: string; // Fecha de inicio (ISO string)
   validUntil: string; // Fecha de expiración (ISO string)
@@ -47,6 +57,7 @@ export interface Coupon {
     minQuantity?: number; // Cantidad mínima de items
   };
   active: boolean; // Si el cupón está activo
+  isActive: boolean; // Alias para active
 }
 
 // Método de envío
@@ -100,6 +111,7 @@ export interface CartState {
   items: CartItem[]; // Items en el carrito
   summary: CartSummary; // Resumen de costos
   appliedCoupon?: Coupon; // Cupón aplicado
+  appliedCoupons: Coupon[]; // Array de cupones aplicados
   shippingInfo?: ShippingInfo; // Información de envío
   lastUpdated: string; // Última actualización (ISO string)
   sessionId: string; // ID de sesión del carrito
