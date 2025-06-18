@@ -227,14 +227,14 @@ export function ProductsPage({
    * Efecto para sincronizar categoría inicial (solo cuando realmente cambia desde fuera)
    */
   useEffect(() => {
-    if (initialCategory !== selectedCategory) {
+    const categoryType = initialCategory as ProductCategory | undefined;
+    if (categoryType !== selectedCategory) {
       console.log(
         "🔄 ProductsPage: Sincronizando categoría inicial:",
         initialCategory,
         "→",
         selectedCategory
       );
-      const categoryType = initialCategory as ProductCategory | undefined;
       setSelectedCategory(categoryType);
       setFilters((prev) => ({
         ...prev,
@@ -243,7 +243,7 @@ export function ProductsPage({
       }));
       // NO llamamos a onCategoryChange aquí para evitar bucles
     }
-  }, [initialCategory]); // Solo depende de initialCategory
+  }, [initialCategory, selectedCategory]);
 
   /**
    * Efecto para actualizar filtros cuando cambia la categoría seleccionada
