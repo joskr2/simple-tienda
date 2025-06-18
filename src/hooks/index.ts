@@ -20,4 +20,7 @@ export {
 export { useCategoriesData } from "./use-categories";
 
 // Hooks del usuario
-export { useUser, useAuth, usePermissions, useProfile } from "./use-user";
+export { useUser, usePermissions, useProfile } from "./use-user";
+
+// Hooks de autenticación
+export { useAuth } from "./use-auth";

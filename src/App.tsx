@@ -18,6 +18,9 @@ import { ProductsPage } from "./page/ProductsPage";
 import { CartDrawer } from "./components/cart/CartDrawer";
 import { useCartDrawer } from "./hooks/use-cart";
 
+// Providers
+import { AuthProvider } from "./contexts/auth-context";
+
 // Simulamos un router simple para esta demostración
 type Page = "home" | "products" | "category" | "product";
 
@@ -140,25 +143,27 @@ function App() {
   };
 
   return (
-    <Layout>
-      {/* Contenido principal de la aplicación */}
-      {renderCurrentPage()}
+    <AuthProvider>
+      <Layout>
+        {/* Contenido principal de la aplicación */}
+        {renderCurrentPage()}
 
-      {/* Drawer del carrito - Siempre presente */}
-      <CartDrawer
-        isOpen={isCartOpen}
-        onClose={closeDrawer}
-        onCheckout={handleCheckout}
-      />
+        {/* Drawer del carrito - Siempre presente */}
+        <CartDrawer
+          isOpen={isCartOpen}
+          onClose={closeDrawer}
+          onCheckout={handleCheckout}
+        />
 
-      {/* 
-        Aquí podrías agregar otros componentes globales como:
-        - Toasts/Notifications
-        - Modals globales
-        - Loading overlay
-        - etc.
-      */}
-    </Layout>
+        {/* 
+          Aquí podrías agregar otros componentes globales como:
+          - Toasts/Notifications
+          - Modals globales
+          - Loading overlay
+          - etc.
+        */}
+      </Layout>
+    </AuthProvider>
   );
 }
 

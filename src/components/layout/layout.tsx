@@ -8,6 +8,7 @@
 import React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Outlet } from "react-router";
+import { AuthProvider } from "../../contexts/auth-context";
 import { CartProvider } from "../../contexts/cart-context";
 import { UserProvider } from "../../contexts/user-context";
 import { ThemeProvider } from "../../contexts/theme-context";
@@ -36,18 +37,20 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
-        <UserProvider>
-          <CartProvider>
-            <div className="flex flex-col min-h-screen bg-background text-foreground">
-              <Header />
-              <main className="flex-1">
-                {/* Si hay children, los usa; si no, usa Outlet para React Router */}
-                {children || <Outlet />}
-              </main>
-              <Footer />
-            </div>
-          </CartProvider>
-        </UserProvider>
+        <AuthProvider>
+          <UserProvider>
+            <CartProvider>
+              <div className="flex flex-col min-h-screen bg-background text-foreground">
+                <Header />
+                <main className="flex-1">
+                  {/* Si hay children, los usa; si no, usa Outlet para React Router */}
+                  {children || <Outlet />}
+                </main>
+                <Footer />
+              </div>
+            </CartProvider>
+          </UserProvider>
+        </AuthProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );
