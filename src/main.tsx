@@ -8,6 +8,7 @@ import {
   ProductsPageWrapper,
   CategoryPageWrapper,
   ProductPageWrapper,
+  ProfilePageWrapper,
 } from "./components/layout/PageWrappers.tsx";
 
 const router = createBrowserRouter([
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
       {
         path: "categoria/:categoria",
         element: <CategoryPageWrapper />,
+      },
+      {
+        path: "perfil",
+        element: <ProfilePageWrapper />,
       },
       // Ruta de fallback para App (compatibilidad)
       {

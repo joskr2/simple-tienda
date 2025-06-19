@@ -12,7 +12,7 @@
  * 8. SEO Optimization - Optimización para motores de búsqueda
  */
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import {
   ArrowLeft,

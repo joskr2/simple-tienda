@@ -2,6 +2,7 @@ import { useNavigate, useParams, useSearchParams } from "react-router";
 import { HomePage } from "../../page/HomePage";
 import { ProductsPage } from "../../page/ProductsPage";
 import { ProductDetailPage } from "../../page/ProductDetailPage";
+import { ProfilePage } from "@/page/ProfilePage";
 
 // Wrapper para HomePage con navegación
 export function HomePageWrapper() {
@@ -112,4 +113,10 @@ export function ProductPageWrapper() {
       onNavigateToProduct={(productId) => navigate(`/producto/${productId}`)}
     />
   );
+}
+
+export function ProfilePageWrapper() {
+  const navigate = useNavigate();
+
+  return <ProfilePage onNavigateBack={() => navigate("/")} />;
 }
