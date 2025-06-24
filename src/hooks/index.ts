@@ -24,3 +24,13 @@ export { useUser, usePermissions, useProfile } from "./use-user";
 
 // Hooks de autenticación
 export { useAuth } from "./use-auth";
+
+// Hooks de FakeStore API
+export {
+  useFakeStoreProducts,
+  useFakeStoreProduct,
+  useFakeStoreProductsByCategory,
+  useFakeStoreCategories,
+  useFakeStoreFeaturedProducts,
+  useFakeStoreHealthCheck,
+} from "./use-fakestore";

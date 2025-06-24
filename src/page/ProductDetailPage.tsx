@@ -5,7 +5,7 @@
  * 1. Product Information Architecture - Arquitectura de información del producto
  * 2. Image Gallery - Galería de imágenes interactiva
  * 3. Specifications Display - Visualización de especificaciones técnicas
- * 4. Reviews System - Sistema de reseñas y calificaciones
+ * 4. Reviews System - Sistema de reseñas yeste componentc  calificaciones
  * 5. Related Products - Productos relacionados y recomendaciones
  * 6. Add to Cart Integration - Integración con carrito de compras
  * 7. Social Sharing - Compartir en redes sociales
@@ -47,9 +47,9 @@ import { Spinner } from "../components/ui/loading";
 import { Section, PageContainer } from "../components/layout/layout";
 import { ProductCard } from "../components/product/ProductCard";
 
-import { useProduct, useProducts } from "../hooks/use-products";
+import { useFakeStoreProduct, useFakeStoreProductsByCategory } from "../hooks/use-fakestore";
 import { useCart } from "../hooks/use-cart";
-import type { Product, ProductCategory } from "../types/product";
+import type { Product, ProductSpecs } from "../types/product";
 
 /**
  * Props de la página de producto
@@ -64,7 +64,7 @@ interface ProductDetailPageProps {
  * Componente de galería de imágenes
  */
 interface ImageGalleryProps {
-  images: string[];
+  images: Array<string | { url: string; thumbnail?: string; alt?: string; isPrimary?: boolean; }>;
   productName: string;
 }
 
@@ -86,7 +86,7 @@ function ImageGallery({ images, productName }: ImageGalleryProps) {
       <div className="relative aspect-square bg-muted rounded-lg overflow-hidden group">
         <motion.img
           key={currentImage}
-          src={images[currentImage]}
+          src={typeof images[currentImage] === 'string' ? images[currentImage] : (images[currentImage] as { url: string })?.url || ''}
           alt={`${productName} - Imagen ${currentImage + 1}`}
           className={`w-full h-full object-cover cursor-zoom-in transition-transform duration-300 ${
             isZoomed ? "scale-150" : "scale-100"
@@ -100,20 +100,20 @@ function ImageGallery({ images, productName }: ImageGalleryProps) {
         {/* Controles de navegación */}
         {images.length > 1 && (
           <>
-            <button
+            <Button
               onClick={prevImage}
               aria-label="Imagen anterior"
               className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
             >
               <ChevronLeft className="h-4 w-4" />
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={nextImage}
               aria-label="Imagen siguiente"
               className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
             >
               <ChevronRight className="h-4 w-4" />
-            </button>
+            </Button>
           </>
         )}
 
@@ -129,7 +129,8 @@ function ImageGallery({ images, productName }: ImageGalleryProps) {
       {images.length > 1 && (
         <div className="flex gap-2 overflow-x-auto pb-2">
           {images.map((image, index) => (
-            <button
+            <Button
+              variant="ghost"
               key={index}
               onClick={() => setCurrentImage(index)}
               className={`flex-shrink-0 w-16 h-16 rounded-md overflow-hidden border-2 transition-colors ${
@@ -139,11 +140,11 @@ function ImageGallery({ images, productName }: ImageGalleryProps) {
               }`}
             >
               <img
-                src={image}
+                src={typeof image === 'string' ? image : image.url}
                 alt={`${productName} - Miniatura ${index + 1}`}
                 className="w-full h-full object-cover"
               />
-            </button>
+            </Button>
           ))}
         </div>
       )}
@@ -274,18 +275,20 @@ function ProductInfo({
       <div className="space-y-4">
         <div className="flex items-center gap-4">
           <div className="flex items-center border rounded-md">
-            <button
+            <Button
+              variant="ghost"
               onClick={() => onQuantityChange(Math.max(1, quantity - 1))}
               aria-label="Disminuir cantidad"
               className="p-2 hover:bg-muted transition-colors"
               disabled={quantity <= 1}
             >
               <Minus className="h-4 w-4" />
-            </button>
+            </Button>
             <span className="px-4 py-2 min-w-[60px] text-center">
               {quantity}
             </span>
-            <button
+            <Button
+              variant="ghost"
               onClick={() =>
                 onQuantityChange(Math.min(product.stock, quantity + 1))
               }
@@ -294,7 +297,7 @@ function ProductInfo({
               disabled={quantity >= product.stock}
             >
               <Plus className="h-4 w-4" />
-            </button>
+              </Button>
           </div>
           <div className="text-sm text-muted-foreground">
             Máximo {product.stock} unidades
@@ -362,7 +365,7 @@ function ProductInfo({
  * Componente de especificaciones técnicas
  */
 interface ProductSpecsProps {
-  specs?: Record<string, string>;
+  specs?: ProductSpecs;
   product: Product;
 }
 
@@ -372,8 +375,8 @@ function ProductSpecs({ specs, product }: ProductSpecsProps) {
   }
 
   const specEntries = Object.entries(specs).filter(
-    ([, value]) => value && value.trim() !== ""
-  );
+    ([, value]) => value && typeof value === 'string' && value.trim() !== ""
+  ) as [string, string][];
 
   return (
     <Card>
@@ -463,13 +466,13 @@ function RelatedProducts({
   category,
   onNavigateToProduct,
 }: RelatedProductsProps) {
-  const { products, isLoading } = useProducts({
-    category: category as ProductCategory,
-    limit: 4,
-  });
+  const { data: products = [], isLoading } = useFakeStoreProductsByCategory(
+    category,
+    { limit: 4 }
+  );
 
   const relatedProducts = products
-    .filter((p) => p.id !== currentProductId)
+    .filter((p: Product) => p.id.toString() !== currentProductId)
     .slice(0, 4);
 
   if (isLoading || relatedProducts.length === 0) {
@@ -486,7 +489,7 @@ function RelatedProducts({
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {relatedProducts.map((product) => (
+        {relatedProducts.map((product: Product) => (
           <motion.div
             key={product.id}
             initial={{ opacity: 0, y: 20 }}
@@ -495,7 +498,7 @@ function RelatedProducts({
           >
             <ProductCard
               product={product}
-              onProductClick={() => onNavigateToProduct(product.id)}
+              onProductClick={() => onNavigateToProduct(product.id.toString())}
             />
           </motion.div>
         ))}
@@ -512,15 +515,15 @@ export function ProductDetailPage({
   onNavigateBack,
   onNavigateToProduct,
 }: ProductDetailPageProps) {
-  const { data: product, isLoading, error } = useProduct(productId);
-  const { addItem } = useCart();
+  const { data: product, isLoading, error } = useFakeStoreProduct(parseInt(productId));
+  const { addToCart } = useCart();
 
   const [quantity, setQuantity] = useState(1);
   const [isInWishlist, setIsInWishlist] = useState(false);
 
   const handleAddToCart = () => {
     if (product) {
-      addItem(product, quantity);
+      addToCart({ product, quantity });
       // Aquí podrías mostrar una notificación de éxito
     }
   };
@@ -546,7 +549,10 @@ export function ProductDetailPage({
         <div className="text-center py-12">
           <h1 className="text-2xl font-bold mb-4">Producto no encontrado</h1>
           <p className="text-muted-foreground mb-6">
-            El producto que buscas no existe o ha sido eliminado.
+            El producto con ID "{productId}" no existe o ha sido eliminado.
+          </p>
+          <p className="text-sm text-muted-foreground mb-6">
+            Los IDs de producto siguen el formato: prod-001, prod-002, etc.
           </p>
           <Button onClick={onNavigateBack}>
             <ArrowLeft className="h-4 w-4 mr-2" />

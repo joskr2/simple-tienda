@@ -17,6 +17,7 @@ import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 
 import type { ProductCategory } from "../../types/product";
+import { useFakeStoreCategories } from "../../hooks/use-fakestore";
 import { categoriesData } from "../../hooks/use-categories";
 import { cn } from "../../lib/utils";
 
@@ -210,6 +211,7 @@ export function CategoriesSection({
             : "flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory"
         )}
       >
+        {/* Mostrar categorías estáticas por ahora, pero se pueden mapear desde FakeStore */}
         {categoriesData.map((category) => (
           <motion.div
             key={category.id}
@@ -258,14 +260,25 @@ export function CompactCategories({
   activeCategory,
   className,
 }: CompactCategoriesProps) {
+  const { data: fakeStoreCategories = [] } = useFakeStoreCategories();
+  
   const handleClick = (categoryId: string) => {
     console.log("🔄 CompactCategories: Click en categoría:", categoryId);
     onCategoryClick?.(categoryId);
   };
 
+  // Mapear categorías de FakeStore a nuestro formato visual
+  const displayCategories = fakeStoreCategories.length > 0 
+    ? fakeStoreCategories.map(cat => ({
+        id: cat,
+        name: cat.charAt(0).toUpperCase() + cat.slice(1),
+        icon: categoriesData.find(c => c.id === cat)?.icon || categoriesData[0]?.icon
+      }))
+    : categoriesData;
+
   return (
     <div className={cn("flex flex-wrap gap-2", className)}>
-      {categoriesData.map((category) => {
+      {displayCategories.map((category) => {
         const Icon = category.icon;
         const isActive = activeCategory === category.id;
 
@@ -282,7 +295,7 @@ export function CompactCategories({
                 : "bg-secondary hover:bg-accent text-secondary-foreground"
             )}
           >
-            <Icon className="h-4 w-4" />
+            {Icon && <Icon className="h-4 w-4" />}
             {category.name}
           </motion.button>
         );

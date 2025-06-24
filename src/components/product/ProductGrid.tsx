@@ -22,7 +22,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { ProductCardSkeleton } from "../ui/loading";
 
 import { ProductCard } from "./ProductCard";
-import { useProducts } from "../../hooks/use-products";
+import { useFakeStoreProducts, useFakeStoreProductsByCategory } from "../../hooks/use-fakestore";
 
 import type {
   ProductSearchParams,
@@ -57,15 +57,13 @@ const sortOptions = [
 ];
 
 /**
- * Categorías disponibles
+ * Categorías disponibles para FakeStore
  */
 const categoryOptions = [
   { value: "electronics", label: "Electrónicos" },
-  { value: "clothing", label: "Ropa" },
-  { value: "books", label: "Libros" },
-  { value: "home", label: "Hogar" },
-  { value: "sports", label: "Deportes" },
-  { value: "beauty", label: "Belleza" },
+  { value: "jewelery", label: "Joyería" },
+  { value: "men's clothing", label: "Ropa de hombre" },
+  { value: "women's clothing", label: "Ropa de mujer" },
 ];
 
 /**
@@ -90,7 +88,7 @@ function useProductFilters(initialFilters: ProductSearchParams = {}) {
   useEffect(() => {
     setFilters(initialFilters);
     setSearchQuery(initialFilters.query || "");
-  }, [JSON.stringify(initialFilters)]);
+  }, [initialFilters]);
 
   // Memoizar el objeto de filtros para evitar re-renders innecesarios
   const memoizedFilters = useMemo(() => filters, [filters]);
@@ -163,8 +161,23 @@ export function ProductGrid({
     clearAllFilters,
   } = useProductFilters(initialFilters);
 
-  // Query de productos
-  const { products, isLoading, error } = useProducts(filters);
+  // Query de productos usando FakeStore
+  const fakeStoreParams = {
+    limit: filters.limit || 20,
+    sort: filters.sort === 'price-asc' ? 'asc' as const : 'desc' as const,
+  };
+  
+  // Always call both hooks to satisfy rules of hooks
+  const { data: allProducts = [], isLoading: isLoadingAll, error: errorAll } = useFakeStoreProducts(fakeStoreParams);
+  const { data: categoryProducts = [], isLoading: isLoadingCategory, error: errorCategory } = useFakeStoreProductsByCategory(
+    filters.category || 'electronics', // Always provide a category
+    fakeStoreParams
+  );
+  
+  // Choose which data to use based on filter
+  const products = filters.category ? categoryProducts : allProducts;
+  const isLoading = filters.category ? isLoadingCategory : isLoadingAll;
+  const error = filters.category ? errorCategory : errorAll;
 
   /**
    * Cuenta los filtros activos

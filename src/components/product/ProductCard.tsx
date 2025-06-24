@@ -115,7 +115,7 @@ export function ProductCard({
   const isInStock = product.stock > 0;
   const isLowStock = product.stock <= 5 && product.stock > 0;
   const itemQuantity = getItemQuantity(product.id);
-  const primaryImage = product.images[0] || product.thumbnail;
+  const primaryImage = typeof product.images[0] === 'string' ? product.images[0] : product.thumbnail;
 
   /**
    * Maneja el click en agregar al carrito

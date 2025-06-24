@@ -140,7 +140,7 @@ export function useProducts(initialParams: ProductSearchParams = {}) {
   // Sincronizar con cambios externos de initialParams
   useEffect(() => {
     setSearchParams(initialParams);
-  }, [JSON.stringify(initialParams)]);
+  }, [initialParams]);
 
   // Query para obtener productos
   const {

@@ -21,8 +21,7 @@ import { Card, CardContent } from "../components/ui/card";
 import { ProductCardSkeleton } from "../components/ui/loading";
 import { Section, PageContainer } from "../components/layout/layout";
 
-import { useProducts } from "../hooks/use-products";
-import type { ProductCategory } from "../types/product";
+import { useFakeStoreFeaturedProducts, useFakeStoreProductsByCategory } from "../hooks/use-fakestore";
 
 /**
  * Props de la HomePage
@@ -43,11 +42,10 @@ function FeaturedProductsSection({
   onNavigateToProduct: (productId: string) => void;
   onNavigateToProducts: () => void;
 }) {
-  // Obtener productos mejor valorados
-  const { products, isLoading } = useProducts({
-    sort: "rating-desc",
-    limit: 8,
-  });
+  // Obtener productos destacados de FakeStore
+  const featuredProducts = useFakeStoreFeaturedProducts(8);
+  const products = featuredProducts || [];
+  const isLoading = false;
 
   return (
     <Section padding="lg" className="bg-muted/30">
@@ -119,12 +117,8 @@ function FeaturedProductsSection({
  * Sección de ofertas especiales
  */
 function SpecialOffersSection() {
-  // Obtener productos en oferta (simulamos con productos de electrónicos)
-  const { products, isLoading } = useProducts({
-    category: "electronics" as ProductCategory,
-    sort: "price-desc",
-    limit: 3,
-  });
+  // Obtener productos en oferta de electrónicos de FakeStore
+  const { data: products = [], isLoading } = useFakeStoreProductsByCategory("electronics", { limit: 3 });
 
   return (
     <Section padding="lg">
@@ -209,7 +203,7 @@ function SpecialOffersSection() {
                     <CardContent className="p-4">
                       <div className="flex gap-4">
                         <img
-                          src={product.images[0] || product.thumbnail}
+                          src={typeof product.images[0] === 'string' ? product.images[0] : product.thumbnail}
                           alt={product.name}
                           className="w-16 h-16 object-cover rounded-lg"
                         />
